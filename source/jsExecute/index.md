@@ -23,7 +23,7 @@ title: JavaScript 执行机制
 
 <div class="font_min">我们不经要问了，那如何知道主线程执行栈为空？ js 引擎存在 monitoring process 进程（监视进程），会持续不断的检查主线程执行栈是否为空，一旦为空，就会去 Event Queue 那里检查是否有等待被调用的函数。</div>
 
-```bash
+```js
 let data = [];
 $.ajax({
     url:www.javascript.com,
@@ -42,26 +42,26 @@ console.log('代码执行结束');
 
 ##### 又爱有恨的 setTimeout
 <div class="font_min">大名鼎鼎的 setTimeout 无需多言，大家对他的第一印象就是异步可以延时执行，我们经常实现3秒执行：</div>
-```bash
+```js
 setTimeout(() => {
     console.log('延时3秒')
 },3000)
 ```
 <div class="font_min">渐渐的 setTimeout 用的地方多了，问题也出现了，有时明明写的是延时3秒，实际确5，6秒才执行函数，这又是咋回事？</div>
 <div class="font_min">先看个例子？</div>
-```bash
+```js
 setTimeout(() => {
     task()
 }, 3000)
 console.log('执行console')
 ```
 <div class="font_min"><span class="key_txt">setTimeout</span> 是异步的，应该会先执行 <span class="key_txt">console.log</span> 这个同步任务，所以结论是：</div>
-```bash
+```js
 //执行console
 //task()
 ```
 <div class="font_min">然后我们修改一下前面的代码</div>
-```bash
+```js
 setTimeout(() => {
     task()
 }, 3000)
@@ -84,7 +84,7 @@ sleep(10000000).then(res => {
 <div class="font_min">经常遇到 <span class="key_txt">setTimeout(fn, 0)</span>这样的代码，0秒后执行又是什么意思呢？是不是可以立即执行？</div>
 <div class="font_min"><span class="key_txt">不会立即执行</span>，setTimeout(fn, 0) 的含义是，指定某个任务在主线程最早可得的空闲时间执行，意思就是说不用在等多少秒了，只要主线程执行栈内的同步任务全部执行完毕，栈为空就会马上执行。举例说明：</div>
 
-```bash
+```js
 //代码1
 console.log('先执行这里');
 setTimeout(() => {
@@ -120,7 +120,7 @@ setTimeout(() => {
 <div class="font_min">不同类型的任务会进入对应的 Event Queue，比如 <span class="key_txt">setTimeout</span> 和 <span class="key_txt">setInterval</span> 会进入到相同的 Event Queue。</div>
 <div class="font_min">事件循环的顺序，决定 js 代码的执行顺序。进入整体代码（<span class="key_txt">宏任务</span>）后，开始第一次循环。接着执行所有的微任务。然后再次从宏任务开始，找到其中一个任务队列执行完毕，再执行所有的微任务。</div>
 
-```bash
+```js
 setTimeout(() => {
     console.log('setTimeout')
 })

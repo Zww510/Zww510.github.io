@@ -5,7 +5,7 @@ categories: 搭建博客
 
 ### 数组转为 tree 结构
 
-``` bash
+``` js
 const arrayToTree = (item) => {
     let arr = []
     let obj = {}
@@ -30,7 +30,7 @@ let arr = [{id: 1, name: '部门1',pid: 0},{id: 2, name: '部门2',pid: 1}]
 
 ### tree 扁平化
 
-``` bash
+``` js
 //利用递归和循环
 const treeToArray = (tree) => {
     let arr = []
@@ -45,7 +45,7 @@ const treeToArray = (tree) => {
         return arr
     }
 ```
-``` bash
+``` js
 //利用reduce 和 递归
 const treeToArray = (tree) => {
     return tree.reduce((arr,item) => {
@@ -57,7 +57,7 @@ const treeToArray = (tree) => {
 
 ### 多维数组扁平化
 
-``` bash
+```js
 const flatten = (arrTree) => {
     return arrTree.reduce((arr, item) => {
         return arr.concat(Array.isArray(item) ? flatten(item) : item)
@@ -69,19 +69,19 @@ const flatten = (arrTree) => {
 
 ### 数组去重
 ##### ES6 中的 Set 去重
-``` bash
+```js
 const noRepetition = (arr) => {
     return [...new Set(arr)]
 }
 ```
 ##### 利用 reduce 去重
-```bash
+```js
 const noRepetition = (arr) => {
     return Object.keys(arr.reduce((obj, val) => (obj[val] = null, obj), {}))
 }
 ```
 ##### 利用 filter 和 indexOf 去重
-```bash
+```js
 const noRepetition = (arr) => {
     return arr.filter((item, index, array) => (index === array.indexOf(item)))
 }
@@ -89,27 +89,27 @@ const noRepetition = (arr) => {
 ```
 
 ### 翻转字符串
-```bash
+```js
 const reverseString = (str) => {
     return [...str].reverse().join('')
 }
 ```
 
 ### 计算数组中某个值出现的次数
-```bash
+```js
 const countOccurrences = (arr, key) => arr.filter(item => item === key).length
 //countOccurrences([2, 1, 3, 3, 2, 3, 3], 2)
 ```
 
 ### 计算数组元素出现次数
-```bash
+```js
 const repetition = (arr) => arr.reduce((obj,item) => (obj[item] = ++obj[item] || 1, obj), {})
 //repetition([1, 2, 2, 3, 3, 3, 4, 4, 4, 4])
 // {1: 1, 2: 2, 3: 3, 4: 4}
 ```
 
 ### 数组合并成数组对象
-```bash
+```js
 const zip = ([x, ...xs], [y, ...ys]) => {
     if(x === undefined || y === undefined) return []
     return [[x, y], ...zip(xs, ys)]
@@ -122,10 +122,10 @@ let arr = zip(ab, ac).map(([name, value]) => ({name, value}))
 
 ### 利用 reduce 累计加乘
 ##### 相加
-```bash
+```js
 const accumulation = (...val) => val.reduce((num, item) => (num + item), 0)
 ```
 ##### 想乘
-```bash
+```js
 const multiplicaiton = (...val) => val.reduce((num, item) => (num * item), 1)
 ```

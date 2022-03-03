@@ -126,7 +126,7 @@
 
 ##### >>清除浮动的方式
 * <div class="font_min">添加而外的标签</div>
-```bash
+```js
 <div class="parent">
     //添加额外标签并且添加clear属性
     <div style="clear:both"></div>
@@ -135,7 +135,7 @@
 
 ```
 * <div class="font_min">给父级添加 overflow: hidden，或者设置高度，或者建立伪类选择器清除浮动</div>
-```bash
+```js
 //在 css 中添加 :after 伪元素
 .parent:after{
     /* 设置添加子元素的内容为空 */
@@ -159,7 +159,7 @@
 
 ##### >>JS 中的数据类型检测方案
 1. <div class="headers">typeof</div>
-```bash
+```js
 console.log(typeof 1);  //number
 console.log(typeof true);   //boolean
 console.log(typeof 'mc');   //string
@@ -175,7 +175,7 @@ console.log(typeof undefined);  //undefined
 <div class="font_min">缺点：不能将 object，array，null 区分，都返回 object</div>
 
 2. <div class="headers">instanceof</div>
-```bash
+```js
 console.log(1 instanceof Number);   //false
 console.log(true instanceof Boolean);   //false
 console.log('str' instanceof String);   //false
@@ -187,7 +187,7 @@ console.log({} instanceof Object);  //true
 <div class="font_min">缺点：Number，Boolean 和 String 基本数据类型不能判断</div>
 
 3. <div class="headers">Object.prototype.toString.call()</div>
-```bash
+```js
 var toString = Object.prototype.toString
 console.log(toString.call(1));  //[object number]
 console.log(toString.call(true));   //[object Boolean]
@@ -256,11 +256,11 @@ let a
 <div class="key_txt font_min">apply: 接受的是一个数组</div>
 <div class="key_txt font_min">bind: 方法返回的任然是一个函数，因此后面还需要 () 来进行调用才可以</div>
      * <span class="font_min">apply() 方法调用一个函数，其具有一个指定的 this 值，以及作为一个数组（或类似数组的对象）提供参数</span>
-     ```bash
+     ```js
      fun.apply(thisArg, [argsArray])
      ```
      * <span class="font_min">call 和 apply 基本类似，他们的区别只是传入的参数不同</span>
-     ```bash
+     ```js
      fun.call(thisArg,1,2,3)
      ```
      * <span class="font_min">bind()方法创建一个新的函数，当被调用时，将其this关键字设置为提供的值，在调用新函数时，在任何提供之前提供一个给定的参数序列</span>
@@ -292,7 +292,7 @@ let a
 * <div class="font_min">Promise</div>
 <div class="font_min">promise 本身是 <span class="key_txt">同步的立即执行函数</span>，当在 executor(执行者) 中执行 resolve 或者 reject 的时候，此时是异步操作，会执行 then/catch等，当主栈完成后，
 才会去调用 resolve/reject 中存放的方法执行。</div>
-```bash
+```js
 console.log('script start')
 let promise1 = new Promise(function (resolve) {
     console.log('promise')
@@ -312,7 +312,7 @@ console.log('script end')
 
 <div class="font_min">async 函数返回一个 promise 对象，当函数执行时，一旦遇到 await 就会先返回，等到触发的异步操作完成后，再执行函数体内后面的语句。可以理解为，是让出了线程，跳出了 async 函数体。</div>
 
-```bash
+```js
 async function async1(){
    console.log('async1 start');
     await async2();
@@ -340,7 +340,7 @@ console.log('script end')
   
 * <div class="font_min">节流：滚动加载更多，搜索框的搜索，高频点击，表单重复提交</div>
 * <div class="font_min">防抖：搜索框搜索输入，并在输入完成以后自动搜索，手机号，邮箱验证输入检测，窗口大小 resize 变化后，再重新渲染。</div>
-```bash
+```js
 /*
      * 节流函数：一个函数执行一次后，只有大于设定的执行周期才会执行第二次，有个需要频繁触发的函数，由于优化性能的角度，在规定时间内，只让函数触发的第一次生效，后面的都不生效。
      * @param fn 要被节流的函数
@@ -499,7 +499,7 @@ model 层代表数据模型，view 代表视图模型，UI 组件，viewModer �
 <div class="font_min">Vue-cli3版本以上，安装依赖。<span class="key_txt">npm install babel-plugin-transform-remove-console -S</span></div>
 <div class="font_min">在 <span class="key_txt">babel.config.js</span> 配置</div>
 
-```bash
+```js
 let transformRemoveConsolePlugin = []
 //生产环境
 if (process.env.NODE_ENV === 'production') {
