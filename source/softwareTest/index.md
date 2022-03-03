@@ -50,13 +50,60 @@ title: 系统集成项目管理师
 * <div class="font_min">四库：即建立人口，法人单位，空间地理和自然资源，宏观经济等四个基础的数据库</div>
 * <div class="font_min">十二金：12个重点业务系统</div>
 
-###### 信息化的指导思想和基本原则
+<div class="font_min">1. 信息技术<span class="key_txt">应</span>用--龙<span class="key_txt">头</span>，主阵地</div>
+<div class="font_min">2. 信息<span class="key_txt">技</span>术和产业--信息化建设的<span class="key_txt">基</span>础</div>
+<div class="font_min">3. 信息化<span class="key_txt">人</span>才--成功之<span class="key_txt">本</span></div>
+<div class="font_min">4. 信息化政策<span class="key_txt">法</span>规和标准规范--根本<span class="key_txt">保</span>障</div>
+<div class="font_min">5. 信息<span class="key_txt">资</span>源--核<span class="key_txt">心</span>任务</div>
+<div class="font_min">6. 信息<span class="key_txt">网</span>络--信息技术应用的<span class="key_txt">基</span>础</div>
+<div class="font_min headers">口诀：鹰头 - 鸡基 - 人本 - 法宝 - 自信 - 网基</div>
+
+###### 国家信息化战略和规划
 <div class="font_min">基本原则</div>
 
 * <div class="font_min">1. 统筹发展，有序推进</div>
 * <div class="font_min">2. 需求牵引，市场导向</div>
 * <div class="font_min">3. 完善机制，创新驱动</div>
 * <div class="font_min">4. 加强管理，保障安全</div>
+
+###### 企业信息化概述
+<div class="font_min">企业信息化结构</div>
+
+* <div class="font_min"><span class="key_txt">产</span>品（服务）层</div>
+* <div class="font_min">作<span class="key_txt">业</span>层</div>
+* <div class="font_min"><span class="key_txt">管</span>理层</div>
+* <div class="font_min">决<span class="key_txt">策</span>层</div>
+
+<div class="font_min headers">口诀：产业观测</div>
+
+<div class="font_min">企业信息化发展的战略要点</div>
+<div class="font_min key_txt">1. 以信息化带动工业化</div>
+<div class="font_min">2. 信息化与企业业务全过程的融合，渗透</div>
+<div class="font_min">3. 信息产业发展与企业信息化良性互动</div>
+<div class="font_min">4. 充分发挥政府的引导作用</div>
+<div class="font_min">5. 高度重视信息安全</div>
+<div class="font_min">6. 企业信息化与企业的改组改造和形成现代企业制度的有机结合</div>
+
+###### 企业资源计划ERP
+<div class="font_min">ERP的概念：随着计算机技术和管理理论的发展，在MRP引入 质量管理，设备管理，财务管理和人力资源管理，形成统一的企业资源计划，即 ERP。</div>
+<div class="font_min">ERP是一个以财务会计为核心的信息系统，对采购，生产，成本，库存，销售，运输，财务和人力资源 等进行规划和优化，使企业利润最大化。</div>
+<div class="font_min">ERP系统的功能</div>
+
+* <div class="font_min">财务管理</div>
+* <div class="font_min">生产控制管理</div>
+* <div class="font_min">物流管理（销售管理，库存控制，采购管理）</div>
+* <div class="font_min">人力资源管理</div>
+
+###### 客户管理管理CRM
+<div class="font_min">客户数据</div>
+<div class="font_min">1. 描述性数据：客户的基本信息</div>
+<div class="font_min">2. 促销性数据：企业曾经为客户提供的产品和服务的历史数据</div>
+<div class="font_min">3. 交易性数据：历史购买记录数据，投诉数据，请求提供咨询及其他服务的相关数据</div>
+
+<div class="font_min mar_top">功能模块</div>
+<div class="font_min">1. 自动化的销售</div>
+<div class="font_min">2. 自动化的市场营销</div>
+<div class="font_min">3. 自动化的客户服务</div>
 
 ##### 电子政务
 <div class="font_min">电子政务的内容，主要包括4个方面</div>
@@ -66,7 +113,12 @@ title: 系统集成项目管理师
 <div class="font_min">4. 政府对公务员（G2E）</div>
 
 ##### 电子商务
-<div class="font_min">电子商务应该具有以下基本特征：</div>
+<div class="font_min ">电子商务应该具有以下基本特征：</div>
+
+<div class="font_min">电子商务的发展历程</div>
+<div class="font_min">1. 原始电子商务：凡使用了诸如电报，电话，广播，电视，传值及计算机，计算机网络等手段，工具和技术进行商务活动，都可以称之为电子商务</div>
+<div class="font_min">2. 现代电子商务：在网络环境下，买卖双方不需要见面，实现线上交易，在线支付，智能配送以及相关综合服务的一切活动</div>
+<div class="font_min headers">EDI （电子数据交换），是连接原始电子商务和现代电子商务的纽带</div>
 
 * <div class="font_min">普遍性：电子商务作为一种新型的交易方式，将生产企业，流通企业，消费者以及金融企业和监管者集成到了数字化的网络经济中</div>
 * <div class="font_min">便利性：不受地域，环境，交易时间的限制</div>
@@ -81,3 +133,45 @@ title: 系统集成项目管理师
 * <div class="font_min">消费者与消费者之间的电子商务（C2C）</div>
 
 <div class="font_min">电子商务与线下实体店有机结合像消费者提供商品和服务，称为（020）模式</div>
+
+
+##### 商业智能（BI）
+<div class="font_min">商业智能是数据仓库，OLAP和数据挖掘等技术的综合运用</div>
+<div class="font_min">主要功能</div>
+
+* <div class="font_min">1. 数据仓库</div>
+* <div class="font_min">2. 数据ETL</div>
+* <div class="font_min">3. 数据统计输出（报表）</div>
+* <div class="font_min">4. 分析功能</div>
+
+<div class="font_min">三个层次</div>
+
+* <div class="font_min">1. 数据报表</div>
+* <div class="font_min">2. 多维数据分析</div>
+* <div class="font_min">3. 数据挖掘：是从特定形式的数据集中提炼的知识工程</div>
+
+<div class="font_min">OLAP 和 OLTP</div>
+<div class="font_min">OLTP：主要用于基本的，日常的事物处理，例如银行交易</div>
+<div class="font_min">OLAP：支持复杂的分析操作，侧重决策支持，并且提供直观易懂的查询结果，也被称为多维分析</div>
+
+<div class="font_min mar_top">实施商业智能的步骤</div>
+<div class="font_min">1. 需求分析</div>
+<div class="font_min">2. 数据仓库建模</div>
+<div class="font_min">3. 数据抽取</div>
+<div class="font_min">4. 建立商户智能分析报表</div>
+<div class="font_min">5. 用户培训和数据模拟测试</div>
+<div class="font_min">6. 系统改进和完善</div>
+
+
+##### 智慧城市
+<div class="font_min">功能层分为以下：</div>
+<div class="font_min">物联感知层：信息采集设备，各类传感器，监控摄像头，GPS终端，FIFID标签</div>
+<div class="font_min">通信网络层：互联网，电信网，广播电视网以及传输介质为光纤的城市专用网</div>
+<div class="font_min">计算与存储层：软件资源，计算资源和存储资源</div>
+<div class="font_min">数据及服务支撑层：SOA，智能挖掘分析，云计算，大数据</div>
+<div class="font_min">智慧应用层：智慧医疗，智慧交通，智慧家政，智慧园区，智慧社区，智慧旅游等</div>
+
+<div class="font_min mar_top">支撑体系分为以下：</div>
+<div class="font_min">安全保障体系</div>
+<div class="font_min">建设和运营管理体系</div>
+<div class="font_min">标准规范体系</div>
