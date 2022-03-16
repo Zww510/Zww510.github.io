@@ -27,8 +27,8 @@
 <meta property="og:site_name" content="Zzz">
 <meta property="og:description" content="关于 JavaScriptjavascript 是一门单线程语言，在最新的 HTML5 中提出了 web-worker，但 javascript 是单线程这一核心从未改变。所以一切 javascript 版的&quot;多线程&quot;都是用单线程模拟出来的。  JavaScript 事件循环既然 JS 是个单线程，那就像只有一个窗口的银行，客户需要排队一个一个办理业务，同理 js 任务也要一个一个顺序执行。如果一">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-03-03T09:38:47.077Z">
-<meta property="article:modified_time" content="2022-03-03T09:38:47.077Z">
+<meta property="article:published_time" content="2022-03-10T06:55:49.413Z">
+<meta property="article:modified_time" content="2022-03-10T06:55:49.413Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 
@@ -215,7 +215,7 @@
 
 <ul>
 <li><div class="font_min">同步和异步分别进入不同的执行"场所"，同步进入主线程，异步进入 Event Table 并注册函数。</div></li>
-<li><div class="font_min">当指定的事情完成时，Event Table 会将这个函数移入 Event Queue（事件队列）。</div></li>
+<li><div class="font_min">当指定的事情完成时，Event Table（事件表） 会将这个函数移入 Event Queue（事件队列）。</div></li>
 <li><div class="font_min">主线程内的任务执行完毕为空，会去 Event Queue 中读取对应的函数，并进入主线程执行。</div></li>
 <li><div class="font_min">上述过程会不断重复，也就是常说的 Event Loop（事件循环）。</div></li>
 </ul>
@@ -278,6 +278,7 @@
 </ul>
 <div class="font_min">事件循环，宏任务，微任务关系图如下：</div>
 <image style="transform: scale(0.8);" src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2017/11/21/15fdcea13361a1ec~tplv-t2oaga2asx-watermark.awebp" />
+
       </div>
       
       
