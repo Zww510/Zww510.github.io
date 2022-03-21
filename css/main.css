@@ -2562,3 +2562,6 @@ ul.breadcrumb li + li:last-child {
   color: #2196f3;
   font-size: 14px;
 }
+.table-container{
+  font-size: 12px;
+}
