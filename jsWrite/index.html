@@ -27,8 +27,8 @@
 <meta property="og:site_name" content="Zzz">
 <meta property="og:description" content="&gt;&gt; 数据类型判断typeof 可以正确的识别：string，number，undefined，boolean，function，symbol 等数据类型，但是对于其他都会认为是 object，比如 null，date 等，所以通过 typeof 来判断数据类型会不准确， 但是可以使用 object.prototype.toString.call() 来实现  123function">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-03-31T09:43:44.472Z">
-<meta property="article:modified_time" content="2022-03-31T09:43:44.472Z">
+<meta property="article:published_time" content="2022-04-02T09:19:07.866Z">
+<meta property="article:modified_time" content="2022-04-02T09:19:07.866Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 
@@ -247,6 +247,22 @@
 
 <h5 id="gt-gt-bind"><a href="#gt-gt-bind" class="headerlink" title="&gt;&gt; bind"></a>&gt;&gt; bind</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.bind2 = <span class="function"><span class="keyword">function</span> (<span class="params">context</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> _this = <span class="built_in">this</span></span><br><span class="line">    <span class="keyword">var</span> args = [...arguments].slice(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">this</span> <span class="keyword">instanceof</span> F) &#123;</span><br><span class="line">            <span class="keyword">return</span>  _this(...args, ...arguments)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> _this.apply(context, args.concat(...arguments))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<h5 id="gt-gt-reduce"><a href="#gt-gt-reduce" class="headerlink" title="&gt;&gt; reduce"></a>&gt;&gt; reduce</h5><div class="font_min">如果我们要实现一个功能将函数里的元素全部相加得到一个值，可能会这样写</div>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="keyword">let</span> total = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">  total += arr[i]</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(total) <span class="comment">//6 </span></span><br></pre></td></tr></table></figure>
+
+<div class="font_min">但是如果我们使用 reduce 的话就可以遍历部分的代码优化为一行代码</div>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"><span class="keyword">const</span> sum = <span class="function">(<span class="params">arr</span>) =&gt;</span> arr.reduce(<span class="function">(<span class="params">num, item</span>) =&gt;</span> num + item, <span class="number">0</span>)</span><br><span class="line"><span class="built_in">console</span>.log(sum(arr))<span class="comment">//6</span></span><br></pre></td></tr></table></figure>
+
+<div class="font_min">对于 reduce 来说，它接受两个参数，分别是回调函数和初始值，接下来我们来分解上诉代码中 reduce 过程</div>
+
+<ul>
+<li><div class="font_min">首先初始值为 <span class="key_txt">0</span>，该值会在执行第一次回调函数时作为第一个参数传入</div></li>
+<li><div class="font_min">回调函数接受4个参数，分别是累计值，当前元素，当前索引，原数组。后三者都明白作用，这里着重分析第一个参数</div></li>
+<li><div class="font_min">在第一次执行回调函数时，当前值和初始值相加得出结果 <span class="key_txt">1</span>，该结果会在第二次执行回调函数时当做第一参数传入</div></li>
+<li><div class="font_min">所以在第二次执行回调函数时，相加的值分别就是 <span class="key_txt">1</span> 和 <span class="key_txt">2</span>，以此类推，循环结束后得到结果 <span class="key_txt">6</span>。</div></li>
+</ul>
 
       </div>
       
@@ -308,7 +324,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#gt-gt-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%88%A4%E6%96%AD"><span class="nav-number">1.</span> <span class="nav-text">&gt;&gt; 数据类型判断</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#gt-gt-%E7%BB%A7%E6%89%BF"><span class="nav-number">2.</span> <span class="nav-text">&gt;&gt; 继承</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#gt-gt-%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D"><span class="nav-number">3.</span> <span class="nav-text">&gt;&gt; 数组去重</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#gt-gt-%E6%95%B0%E7%BB%84%E6%89%81%E5%B9%B3%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">&gt;&gt; 数组扁平化</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#gt-gt-call"><span class="nav-number">5.</span> <span class="nav-text">&gt;&gt; call</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#gt-gt-apply"><span class="nav-number">6.</span> <span class="nav-text">&gt;&gt; apply</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#gt-gt-bind"><span class="nav-number">7.</span> <span class="nav-text">&gt;&gt; bind</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#gt-gt-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%88%A4%E6%96%AD"><span class="nav-number">1.</span> <span class="nav-text">&gt;&gt; 数据类型判断</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#gt-gt-%E7%BB%A7%E6%89%BF"><span class="nav-number">2.</span> <span class="nav-text">&gt;&gt; 继承</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#gt-gt-%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D"><span class="nav-number">3.</span> <span class="nav-text">&gt;&gt; 数组去重</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#gt-gt-%E6%95%B0%E7%BB%84%E6%89%81%E5%B9%B3%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">&gt;&gt; 数组扁平化</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#gt-gt-call"><span class="nav-number">5.</span> <span class="nav-text">&gt;&gt; call</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#gt-gt-apply"><span class="nav-number">6.</span> <span class="nav-text">&gt;&gt; apply</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#gt-gt-bind"><span class="nav-number">7.</span> <span class="nav-text">&gt;&gt; bind</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#gt-gt-reduce"><span class="nav-number">8.</span> <span class="nav-text">&gt;&gt; reduce</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
