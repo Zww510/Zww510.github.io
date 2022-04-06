@@ -29,8 +29,8 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2017/10/25/9cb491d4bd5d326aeb16632280411283~tplv-t2oaga2asx-watermark.awebp">
 <meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a7249773a1634f779c48f3f0ffabf968~tplv-k3u1fbpfcp-watermark.awebp">
-<meta property="article:published_time" content="2022-04-02T10:33:09.089Z">
-<meta property="article:modified_time" content="2022-04-02T10:33:09.089Z">
+<meta property="article:published_time" content="2022-04-06T03:00:42.592Z">
+<meta property="article:modified_time" content="2022-04-06T03:00:42.592Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2017/10/25/9cb491d4bd5d326aeb16632280411283~tplv-t2oaga2asx-watermark.awebp">
@@ -160,6 +160,11 @@
         <li class="menu-item menu-item-softwaretest">
 
     <a href="/softwareTest/" rel="section"><i class="fa fa-th fa-fw"></i>系统项目管理工程师</a>
+
+  </li>
+        <li class="menu-item menu-item-tcp-dep">
+
+    <a href="/Tcp-Dep/" rel="section"><i class="fa fa-th fa-fw"></i>Tcp与Dep的区别</a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -385,7 +390,7 @@
 <div class="font_min">缺点：Number，Boolean 和 String 基本数据类型不能判断</div>
 <div class="font_min">可以试着实现一下 instanceof</div>
 
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//首先获取类型的原型</span></span><br><span class="line"><span class="comment">//然后获取对象的原型</span></span><br><span class="line"><span class="comment">//然后一直循环判断对象的原型是否等于类型的原型，直到对象原型为 null，因为原型链最终为 null</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myInstanceof</span>(<span class="params">left, right</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> prototype = right.prototype</span><br><span class="line">    left = left.__proto__</span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span>(left === <span class="literal">null</span> || left === <span class="literal">undefined</span>) <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">        <span class="keyword">if</span>(prototype === left) <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">        left = left.__ptoto__</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//首先获取类型的原型</span></span><br><span class="line"><span class="comment">//然后获取对象的原型</span></span><br><span class="line"><span class="comment">//然后一直循环判断对象的原型是否等于类型的原型，直到对象原型为 null，因为原型链最终为 null</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myInstanceof</span>(<span class="params">left, right</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> prototype = right.prototype</span><br><span class="line">    left = left.__proto__</span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>) &#123;      </span><br><span class="line">        <span class="keyword">if</span>(left === <span class="literal">null</span> || left === <span class="literal">undefined</span>) <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">        <span class="keyword">if</span>(prototype === left) <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">        left = left.__ptoto__</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 <ol start="3">
