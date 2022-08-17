@@ -72,10 +72,10 @@
 规则有内部 box 垂直放置，计算 BFC 的高度的时候，浮动元素也参与计算。</div>
 
 ###### <div class="headers">BFC 的原理布局规则</div>
-* <div class="font_min">内部的 Box 会在垂直方向，一个接一个的放置</div>
-* <div class="font_min">Box 垂直方向的距离有 margin 决定。属于同一个 BFC 的两个相邻 box 的margin会重叠</div>
+* <div class="font_min">内部的 Box 会在垂直方向上，一个接一个的放置</div>
+* <div class="font_min">Box 垂直方向的距离由 margin 决定。属于同一个 BFC 的两个相邻 box 的margin会重叠</div>
 * <div class="font_min">每个元素的 margin box 的左边，与包含块 border box 的左边相邻接触（对于从左往右的格式化，否侧相反）</div>
-* <div class="font_min">BFC 的区域不会与 flot box 重叠</div>
+* <div class="font_min">BFC 的区域不会与 flot 的元素区域 重叠</div>
 * <div class="font_min">BFC是一个独立容器，容器里面的子元素不会影响到外面的元素</div>
 * <div class="font_min">计算 BFC 的高度时，浮动元素也参与计算</div>
 * <div class="font_min">元素的类型和 display 属性，决定了这个 box 的类型，不同类型的 BOX 会参与不同的 Formatting Context。</div>
@@ -97,18 +97,31 @@
 ###### <div class="headers">水平居中</div>
 * <div class="font_min">对于行内元素：text-align: center</div>
 * <div class="font_min">对于确定宽度的块级元素</div>
-* 1. <div class="font_min">width 和 margin 实现，margin: 0 auto</div>
-* 2. <div class="font_min">绝对定位和 margin-left：（父 width - 子 width）/ 2，前提是父元素是相对定位 position: relative</div>
-* <div class="font_min">对于宽度未知的块级元素</div>
-* 1. <div class="font_min">table 标签配合 margin 左右 auto 实现水平居中。使用 table 标签（或直接将块级元素设置成 display: table），在通过给该标签添加左右 margin 为 auto</div>
-* 2. <div class="font_min">inline-block 实现水平居中方法，display: inline-block 和 text-align: center 实现水平居中</div>
-* 3. <div class="font_min">绝对定位 + transform，translateX 可以移动本身元素的50%</div>
-* 4. <div class="font_min">flex 布局使用 justify-content: center</div>
+* <div class="font_min">width 和 margin 实现，margin: 0 auto</div>
+* <div class="font_min">绝对定位和 margin-left：（父 width - 子 width）/ 2，前提是父元素是相对定位 position: relative</div>
+
+<div class="font_min">对于宽度未知的块级元素</div>
+
+* <div class="font_min">table 标签配合 margin 左右 auto 实现水平居中。使用 table 标签（或直接将块级元素设置成 display: table），在通过给该标签添加左右 margin 为 auto</div>
+* <div class="font_min">inline-block 实现水平居中方法，display: inline-block 和 text-align: center 实现水平居中</div>
+* <div class="font_min">绝对定位 + transform，translateX 可以移动本身元素的50%</div>
+* <div class="font_min">flex 布局使用 justify-content: center</div>
 
 ##### >>隐藏页面中某个元素的方法
 * <div class="font_min">opacity: 0，将目标元素隐藏起来，但不会改变页面布局，并且，如果该元素已经绑定一些事件，那么点击该区域，能正常触发事件</div>
 * <div class="font_min">visibility: hidden，将目标元素隐藏起来，但不会改变页面布局，但不会触发该元素已绑定的事件，隐藏对应元素，在文档流中任然保留空间（重绘）。</div>
 * <div class="font_min">display: none，将目标元素隐藏起来，不占据文档流空间（回流 + 重绘），会改变页面布局，不显示对应的元素</div>
+
+##### >>重排和重绘
+<div class="markdown-body">
+关键渲染路径是浏览器将 HTML，CSS 和 JavaScript 转换为屏幕上的像素所经历的步骤序列，优化关键路径渲染可提高渲染性
+<div class="font_min">大致步骤：浏览器在解析 HTML 时会创建 DOM -> 解析 CSS 文件 -> 生成 CSSOM，CSSOM 包含了页面所有的样式 -> DOM 和 CSSOM 树结合为渲染树 -> 渲染树构建完成后，开始布局，取决于屏幕的尺寸 -> 布局完成，
+像素就可以被绘制在屏幕上，之后，只有受影响的屏幕区域会被重绘</div>
+</div>
+
+* <div class="font_min">重排：元素的位置发送变动发生重排，也叫回流。此时在布局阶段，计算每一个元素在设备视口内的确切位置和大小。当一个元素位置发生变化时，其父元素及其后边的元素位置都有可能发生变化，代价高。</div>
+* <div class="font_min">重绘：元素的样式发生变动，但是位置没有变化。此时在关键渲染路径的像素绘制阶段。</div>
+* <div class="font_min key_txt">重排一定会重绘，重绘不一定会重排。</div>
 
 ##### >>页面布局
 ###### <div class="headers">flex 布局</div>
@@ -151,6 +164,32 @@
 }
 ```
 
+##### >>Url输入到页面展现发生了什么
+* <div class="font_min">DNS 解析：将域名解析成 IP 地址</div>
+* <div class="font_min">TCP 连接：TCP 三次握手</div>
+* <div class="font_min">发送 HTTP 请求</div>
+* <div class="font_min">服务器处理请求并返回 HTTP 报文</div>
+* <div class="font_min">浏览器解析渲染页面</div>
+* <div class="font_min">断开连接：TCP四次挥手</div>
+
+##### >>三次握手
+<div class="font_min">1. 第一次握手：客户端会给服务器发送一个 <span class="key_txt">SYN</span> 报文</div>
+<div class="font_min">2. 第二次握手：服务器收到 <span class="key_txt">SYN</span> 报文后，会应答一个 <span class="key_txt">SYN + ACK</span> 报文</div>
+<div class="font_min">3. 第三次握手：客户端收到 <span class="key_txt">SYN + ACK</span> 报文之后，会回应一个 <span class="key_txt">ACK</span> 报文</div>
+<div class="font_min">4. 服务器收到 <span class="key_txt">ACK</span> 报文后，三次握手 <span class="key_text">建立完成</span></div>
+<div class="font_min">作用是为了确认双方的接收与发送能力是否正常</div>
+
+<div class="font_min markdown-body mar_top">为啥只要三次握手才能确认双方的接收与发送能力是否正常，而两次却不可以？  
+
+* <div class="font_min">第一次握手：客户端发送网络包，服务端收到了。由此服务端能得出结论：客户端的发送能力，服务端的接收能力是正常的</div>
+* <div class="font_min">第二次握手：服务端发包，客户端收到了。这样客户端就能得出结论：服务端的接收，发送能力，客户端的接收，发送能力是正常的。不过此时服务器并不能确认客户端的接收能力是否正常</div>
+* <div class="font_min">第三次握手：客户端发包，服务端收到了。这样服务端就能得出结论：客户端的接收，发送能力是正常，服务器自己的发送，接收能力正常</div>
+
+<div class="font_min">因此，需要三次握手才能确认双方的接收与发送能力是否正常</div>
+
+</div>
+
+
 ### JS, TS, ES6
 ##### >>JS 中的8中数据类型及区别
 <div class="font_min">包括值类型（基本对象类型）和引用类型（复杂对象类型）</div>
@@ -175,6 +214,8 @@ console.log(typeof undefined);  //undefined
 <div class="font_min">缺点：不能将 object，array，null 区分，都返回 object</div>
 
 2. <div class="headers">instanceof</div>
+<div class="font_min"><span class="key_txt">instanceof</span> 可以正确的判断对象的类型，因为内部机制是通过判断对象的原型链中是不是能找到类型的 <span class="key_txt">prototype</span></div>
+
 ```js
 console.log(1 instanceof Number);   //false
 console.log(true instanceof Boolean);   //false
@@ -183,8 +224,25 @@ console.log([] instanceof Array);   //true
 console.log(function(){} instanceof function); //true
 console.log({} instanceof Object);  //true
 ```
-<div class="font_min">优点：能够区分 Array，Object 和 Function，合适用来判断自定义的类实列对象</div>
+<div class="font_min">优点：能够区分 Array，Object 和 Function，合适用来判断自定义的类实列对象，<span class="key_txt">主要用于检测某个构造函数的原型对象在不在某个对象的原型链上</span></div>
 <div class="font_min">缺点：Number，Boolean 和 String 基本数据类型不能判断</div>
+<div class="font_min">可以试着实现一下 instanceof</div>
+
+```js
+//首先获取类型的原型
+//然后获取对象的原型
+//然后一直循环判断对象的原型是否等于类型的原型，直到对象原型为 null，因为原型链最终为 null
+function myInstanceof(left, right) {
+    let prototype = right.prototype
+    left = left.__proto__
+    while (true) {      
+        if(left === null || left === undefined) return false
+        if(prototype === left) return true
+        left = left.__proto__
+    }
+}
+```
+
 
 3. <div class="headers">Object.prototype.toString.call()</div>
 ```js
@@ -222,7 +280,7 @@ let a
 ##### >>JS 垃圾回收机制
 <div class="font_min">1. 项目中，如果存在大量不被释放的内存（堆/栈/上下文），页面性能会变得很慢，当某些代码操作不能被合理释放，就会造成内存泄漏。我们尽可能的少使用闭包，因为它会消耗内存。</div>
 <div class="font_min">2. 浏览器垃圾回收机制/内存回收机制:</div>
-<div class="markdown-body">浏览器的 javascript 具有自动垃圾回收机制（GC:Garbage Collecation），垃圾收集器会定期（周期性）找出那些不在使用的变量，然后释放其内存。</div>
+<div class="font_min markdown-body">浏览器的 javascript 具有自动垃圾回收机制（GC:Garbage Collecation），垃圾收集器会定期（周期性）找出那些不在使用的变量，然后释放其内存。</div>
 <div class="font_min"><span class="headers">标记清除:</span>在 js 中，最常用的垃圾回收机制就是标记清除，当变量进入执行环境时，被标记为'进入环境'，当变量离开执行环境时，被标记为'离开环境'。
 垃圾回收机制会摧毁那些带标记的值并回收他们所占用的内存空间。</div>
 <div class="font_min">3. 优化手段：内存优化；手动释放：取消内存的占用即可</div>
@@ -242,6 +300,29 @@ let a
 <div class="font_min">作用：作用域最大的作用就是<span class="key_txt">隔离变量</span>，不同作用域下同名变量不会有冲突。</div>
 <div class="font_min"><span class="headers">作用域链：</span>一般情况下，变量到 创建变量的函数作用域中取值，但如果在当前的作用域没有找到，就会像上级作用域去查，直到查到全局作用域，这一个查找过程
 形成的链条就叫做作用域链。</div>
+
+##### >>闭包
+<div class="font_min"><span class="key_txt">闭包是指有权访问另一个函数作用域内变量的函数</span>，创建闭包最常见的方式就是在一个函数内创建另一个函数，创建的函数可以访问到当前函数的局部变量</div>
+<div class="font_min">闭包有两个常用的用途</div>
+
+* <div class="font_min">1. 使我们能在函数外部能够访问到函数内部的变量。通过使用闭包，我们可以通过在外部调用闭包函数，从而在外部访问到函数内部的变量，可以使用这种方法来创建私有变量</div>
+* <div class="font_min">2. 使已经运行结束的函数上下文中的变量对象继续留在内存中，因为闭包函数保留了这个变量对象的引用，所以这个变量对象不会给回收</div>
+
+<div class="font_min key_txt">闭包本质上就是上级作用域内变量的生命周期，因为被下级作用域内引用，而没有被释放。就导致上级作用域的变量，等到下级作用域执行完以后才正常得到释放。</div>
+
+```js
+function a() {
+    var n = 0
+    function add() {
+        n++
+        console.log(n)
+    }
+    return add
+}
+var a1 = a(); //注意：函数只是一个标识（指向函数的指针），而 () 才是执行函数
+a1() // 1
+a2() // 2 第二次调用n变量还在内存中
+```
 
 ##### >>JS 中 this 的五种情况
 <div class="font_min">1. 作为普通函数执行时<span class="key_txt">this 指向 window</span></div>
@@ -282,8 +363,8 @@ let a
 ##### >>new 运算符的实现机制
 <div class="font_min">1. 首先创建了一个新的空对象</div>
 <div class="font_min">2. 继承构造函数的原型</div>
-<div class="font_min">3. 将构造函数的 this 指向 new 出来的对象</div>
-<div class="font_min">4. 如果该函数没有返回对象，则返回 this</div>
+<div class="font_min">3. 绑定 this</div>
+<div class="font_min">4. 如果该函数没有返回对象，则返回 this （返回新对象）</div>
 
 ##### >>setTimeout、Promise、Async/Await 的区别
 * <div class="font_min">setTimeout</div>
@@ -330,6 +411,12 @@ console.log('script end')
 
 ##### >>Async/Await 如何通过同步的方式实现异步
 <div class="font_min">Async/Await 就是一个自执行的 generate 函数，利用 generate 函数的特性把异步的代码写成 '同步' 的形式，第一个请求的返回值作为后面请求的参数，其中每一个参数都是一个 promise 对象。</div>
+
+##### >>Cookie, sessionStorage, localStorage 的区别
+<div class="font_min markdown-body">
+<div class="font_min">cookie 数据大小不能超过4k，sessionStorage和localStorage的存储比 cookic 大得多，可以达到 5M+</div>
+<div class="font_min">cookie 在设置的过期时间之前一直有效，localStorage 永久存储，浏览器关闭后数据不会丢失，除非主动删除数据。sessionStorage 数据在当前浏览器关闭后自动删除</div>
+</div>
 
 ##### >>介绍节流防抖原理，区别以及应用
 <div class="font_min"><span class="key_txt">节流:</span> 事件触发后，规定时间内，事件处理函数不能再次被调用。也就是说在规定时间内，函数只能被调用一次，且是最先被触发调用的那一次</div>
@@ -406,8 +493,9 @@ model 层代表数据模型，view 代表视图模型，UI 组件，viewModer �
 <div class="font_min">vue 是一个典型的 MVVM 框架，模型（Modle）只是普通的 Javascript 对象，修改它则视图（view）会自动更新。这种设计让状态管理变得非常简单而直观。</div>
 <div class="font_min "><span class="headers">Observer （数据监听器）</span>：Observer 的核心是通过 Object.defineProperty() 来监听数据的变动，这个函数内部可以定义 setter 和 getter，每当数据发生变化，就会触发 setter。这时候 Observer 就要通知订阅者，订阅者就是 Watcher</div>
 <div class="font_min "><span class="headers">Compile （指令解析器）</span>：Compile 主要做的是解析模板指令，将模板中变量替换成数据，然后初始化渲染页面视图，并将每个指令对应的节点绑定更新函数，添加鉴定数据的订阅者，
-一旦数据有变动，收到通知，更新视图。</div>
-<div class="font_min "><span class="headers">Watcher（订阅者）</span>：Watcher 订阅者作为 Observer 和 Compile 之间通信的桥梁</div>
+一旦数据有变动，收到通知，调用更新函数进行数据更新。</div>
+<div class="font_min "><span class="headers">Watcher（订阅者）</span>：Watcher 订阅者作为 Observer 和 Compile 之间通信的桥梁，主要任务就是订阅 Observer 中的属性值变化的消息，当收到属性值变化的消息时，触发解析器 Compile  中对应的更新函数。</div>
+<div class="font_min "><span class="headers">Dep（订阅器）</span>：订阅器采用 发布 - 订阅 设计模式，用来收集订阅者 Watcher，对监听器 Observer 和 订阅者 Watcher 进行统一管理。</div>
 <image src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/12/7/16ede3f4bc83638a~tplv-t2oaga2asx-watermark.awebp" />
 
 ##### >>谈谈对 Vue 生命周期的理解
@@ -450,6 +538,7 @@ model 层代表数据模型，view 代表视图模型，UI 组件，viewModer �
 <div class="font_min">父 -> 子 <span class="key_txt">props</span>，子 -> 父 <span class="key_txt">$on、$eimt</span> 获取父子组件实例 <span class="key_txt">parent、children、Ref</span> 获取实例的方法调用组件的属性或者方法</div>
 
 * <div class="font_min">$emit / $on 自定义事件 兄弟组件通信</div>
+* <div class="font_min">provide/inject (祖先及其后代传值)</div>
 * <div class="font_min">vuex 跨组件通信</div>
 
 ##### >>nextTick 的实现
@@ -519,3 +608,6 @@ module.exports = {
 <div class="font_min"><span class="key_txt">第三方库的按需加载。</span>echarts，官方文档里是使用配置文件指定使用的模块，另一种使用 <span class="key_txt">babel-plugin-equire</span> 实现按需加载。element-ui 使用 <span class="key_txt">babel-plugin-component</span> 实现按需加载。</div>
 <div class="font_min">减少请求次数。</div>
 <div class="font_min">使用 CDN 加速。</div>
+
+##### >>主流库
+<div class="font_min"><span class="headers">async-validator</span>：校验库，基本主流的组件库都是基于它做的校验。</div>

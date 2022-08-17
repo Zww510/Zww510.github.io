@@ -17,7 +17,7 @@ title: JavaScript 执行机制
 <div class="font_min">导图要表达的内容用文字来表述的话：</div>
 
 * <div class="font_min">同步和异步分别进入不同的执行"场所"，同步进入主线程，异步进入 Event Table 并注册函数。</div>
-* <div class="font_min">当指定的事情完成时，Event Table 会将这个函数移入 Event Queue（事件队列）。</div>
+* <div class="font_min">当指定的事情完成时，Event Table（事件表） 会将这个函数移入 Event Queue（事件队列）。</div>
 * <div class="font_min">主线程内的任务执行完毕为空，会去 Event Queue 中读取对应的函数，并进入主线程执行。</div>
 * <div class="font_min">上述过程会不断重复，也就是常说的 Event Loop（事件循环）。</div>
 

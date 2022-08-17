@@ -46,9 +46,9 @@ const FULFILLED = 'fulfilled'
 const REJECTED = 'rejected'
 
 //存储成功回调函数
-onFulfilledCallback = null
+onFulfilledCallback = []
 //存储失败回调函数
-onRejectedCallback = null
+onRejectedCallback = []
 
 //新建 MyPromise 类
 class MyPromise {
@@ -77,8 +77,11 @@ class MyPromise {
             this.status = FULFILLED
             //保存成功之后的值
             this.value = value
-            //判断成功回调是否存在，如果存在就调用
-            this.onFulfilledCallback && this.onFulfilledCallback(value)
+            // resolve里面将所有成功的回调拿出来执行
+            while (onFulfilledCallback.length) {
+                // Array.shift() 取出数组第一个元素，然后（）调用，shift不是纯函数，取出后，数组将失去该元素，直到数组为空
+                onFulfilledCallback.shift()(value)
+            }
         }
     }
 
@@ -91,25 +94,45 @@ class MyPromise {
             //保存成功之后的值
             this.reason = reason
             //判断失败回调是否存在，如果存在就调用
-            this.onRejectedCallback && this.onRejectedCallback(reason)
+            onRejectedCallback.shift()(reason)
         }
     }
 
     //then 的简单实现
     then(onFulfilled, onRejected) {
-        //判断状态
-        if (this.status === FULFILLED) {
-            //调用成功回调，并且把值返回
-            onFulfilled(this.value)
-        } else if (this.status === REJECTED) {
-            //调用失败的回调，并把原因返回
-            onRejected(this.reason)
-        } else if (this.status === PENDING) {
-            //因为不知道后面状态的变化情况，所以将成功回调和失败回调存储起来
-            //等到执行成功失败函数的时候再传送
-            this.onFulfilledCallback = onFulfilled
-            this.onRejectedCallback = onRejected
-        }
+        // 为了链式调用这里直接创建一个 MyPromise，并在后面 return 出去
+        const promise2 = new MyPromise((resolve, reject) => {
+            //判断状态
+            // 这里的内容在执行器中，会立即执行
+            if (this.status === FULFILLED) {
+                // 获取成功回调函数的执行结果
+                const x = onFulfilled(this.value)
+                // 传入 resolvePromise 集中处理
+                resolvePromise(x, resolve, reject)
+            } else if (this.status === REJECTED) {
+                //调用失败的回调，并把原因返回
+                onRejected(this.reason)
+            } else if (this.status === PENDING) {
+                // 因为不知道后面状态的变化，这里先将成功回调和失败回调存储起来
+                // 等待后续调用
+                onFulfilledCallback.push(onFulfilled)
+                onRejectedCallback.push(onRejected)
+            }
+        })
+        return promise2
+    }
+}
+
+function resolvePromise(x, resolve, reject) {
+    // 判断x是不是 MyPromise 实例对象
+    if (x instanceof MyPromise) {
+        // 执行 x，调用 then 方法，目的是将其状态变为 fulfilled 或者 rejected
+        // x.then(value => resolve(value), reason => reject(reason))
+        // 简化之后
+        x.then(resolve, reject)
+    } else {
+        // 普通值
+        x.then(x)
     }
 }
 
@@ -137,5 +160,36 @@ promise1.then(value => {
     console.log('reject', reason)
 })
 
+//链式调用
+promise.then(value => {
+    console.log(1)
+    console.log('resolve', value)
+    return other()
+}).then(value => {
+    console.log(2)
+    console.log('resolve', value)
+})
+
 //输出resolve success
+```
+##### Promise 中的 .all() , race() , allSettled()
+<div class="font_min headers">Promise.all()</div>
+
+* <div class="font_min"><span class="key_txt">Promise.all()</span>方法传入一个数组，如果参数中 Promise 有一个失败，此实例回调失败，失败的原因是第一个 Promise 的结果</div>
+
+<div class="font_min headers">Promise.race()</div>
+
+* <div class="font_min"><span class="key_txt">Promise.race()</span>方法返回一个 Promise，一旦迭代器中的某个 Promise 解决或拒绝，返回的 Promise 就会解决或拒绝。race() 接受的也是数组，不过，得到的却是数组中跑得最快的那个，当最快的一个跑完就立马结束。</div>
+* <div class="font_min key_txt">赛跑机制，只认第一名</div>
+
+<div class="font_min headers">Promise.allSettled()</div>
+
+* <div class="font_min"><span class="key_txt">Promise.allSettled()</span>方法返回一个所有给定的 Promise 都已经 fulfilled 或 rejected 后的 Promise，并带有一个对象数组，每个对象表示对应的 Promise 结果。</div>
+* <div class="font_min">当所有的 Promise 都被 fulfilled 或 rejected 时，statusesPromise 会解析为一个具有他们状态的数组</div>
+
+```js
+/*
+{ status: 'fulfilled', value: value } - 如果对应的 Promise 已经被 fulfilled
+{ status: 'rejected',  reason: reason} - 如果对应的 Promise 已经被 rejected
+*/
 ```

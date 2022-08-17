@@ -129,3 +129,7 @@ const accumulation = (...val) => val.reduce((num, item) => (num + item), 0)
 ```js
 const multiplicaiton = (...val) => val.reduce((num, item) => (num * item), 1)
 ```
+
+### 插件
+<div class="font_min">深拷贝插件</div>
+<div class="font_min key_txt">lodash</div>
