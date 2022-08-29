@@ -423,6 +423,9 @@ console.log('script end')
 <div class="font_min"><span class="key_txt">防抖:</span> 多次触发事件，事件处理函数只能执行一次，并且是在触发操作结束后执行。也就是说，当一个事件被触发准备执行函数前，会等待一定时间，（时间自定义）
 如果时间内没有再次被触发，那么就执行，如果被触发了，那就本次作废，重新从新触发的时间计算，并再次等待定义的时间，直到能最终执行。</div>
 
+* <div class="font_min key_txt">防抖就类似回城，打断就得重新回</div>
+* <div class="font_min key_txt">节流就类似技能冷却需要冷却时间到了才能用</div>
+
  <div class="font_min key_txt">使用场景:</div>
   
 * <div class="font_min">节流：滚动加载更多，搜索框的搜索，高频点击，表单重复提交</div>

@@ -2,11 +2,11 @@
 title: Vue知识点
 ---
 
-##### >> Vue的优点？Vue的缺点？
+##### Vue的优点？Vue的缺点？
 <div class="font_min"><span class="key_txt">优点</span>：渐进式，组件化，轻量级，虚拟 dom，响应式，单页面路由，数据和视图分开</div>
 <div class="font_min"><span class="key_txt">缺点</span>：单页面不利于 SEO 优化，不支持 IE8 以下，首屏加载时间长</div>
 
-##### >> Vue 跟 React 的异同点？
+##### Vue 跟 React 的异同点？
 <div class="font_min headers">相同点</div>
 
 * <div class="font_min">1. 都使用了虚拟 DOM。</div>
@@ -21,7 +21,7 @@ title: Vue知识点
 * <div class="font_min">3. React 是单向绑定，Vue 是双向绑定。</div>
 * <div class="font_min">4. React 的状态管理工具是 Redux，Vue 的是 Vuex。</div>
 
-##### >> 怎样理解 Vue 的单向数据流？
+##### 怎样理解 Vue 的单向数据流？
 <div class="font_min">所有的 prop 都使其父子 prop 之间形成一个 单向下行绑定：父级 prop 的更新会向下流动到子组件中，但是反过来则不行。这样会防止从子组件意外改变父组件的状态，从而导致你的数据应用流向难以理解</div>
 <div class="font_min mar_top">额外的，每次父级组件发生更新时，子组件中所有的 prop 都将会刷新为最新的值。这意味着你不应该在一个子组件内部改变 prop，如果你这样做了，Vue 在浏览器的控制台中会发生警告。若子组件想要修改时，只能通过 $emit 派发一个自定义事件，父组件接受到后，由父组件修改</div>
 <div class="font_min mar_top">有两种常见试图改变一个 prop 的情形：</div>
@@ -45,7 +45,7 @@ computed: {
 }
 ```
 
-##### >> 谈谈你对生命周期的理解
+##### 谈谈你对生命周期的理解
 <div class="font_min headers">1. 生命周期时什么</div>
 <div class="font_min">Vue 实例有一个完整的生命周期，也就是从开始创建，初始化数据，编译模板，挂载 DOM -> 渲染，更新 -> 渲染，卸载等一些列过程，我们称这是 Vue 的生命周期</div>
 <div class="font_min headers mar_top">2. 各个生命周期的作用</div>
@@ -66,7 +66,7 @@ computed: {
 <div class="font_min headers mar_top">3. 生命周期示意图</div>
 <img alt="1.png" src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/8/19/16ca74f183827f46~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp" loading="lazy" class="medium-zoom-image">
 
-##### >> Vue 的父组件和子组件生命周期钩子函数执行顺序？
+##### Vue 的父组件和子组件生命周期钩子函数执行顺序？
 <div class="font_min">Vue 的父组件和子组件生命周期钩子函数执行顺序可以归类为：</div>
 
 * <div class="font_min">加载渲染过程</div>
@@ -78,7 +78,7 @@ computed: {
 * <div class="font_min">销毁过程</div>
 <div class="font_min">父 beforeDestroy -> 子 beforeDestroy -> 子 destroyed -> 父 destroyed </div>
 
-##### >> Vue的双向绑定原理
+##### Vue的双向绑定原理
 <div class="font_min">是采用数据劫持发布者 - 订阅者的模式，通过Object.defineProperty() 来劫持各个属性的 setter 和 getter，在数据变动时发布消息给订阅者，触发相应的监听回调。主要分为以下几个步骤</div>
 
 * <div class="font_min"><span class="key_txt">Observer</span>：对数据对象进行递归遍历，这样可以确保子属性对象的属性也可以给劫持到，使用 Object.defineProperty() 劫持 set 和 get，数据变动，就会触发 setter，就能监听到了数据变化</div>
@@ -90,28 +90,132 @@ computed: {
 
 * <div class="font_min"><span class="key_txt">MVVM</span>：作为数据绑定的入口，整合 Observer，Compile，Watcher 三者，通过 Observer 来监听 model 数据变化，通过 Compile 来解析编译模板指令，最终利用 Watcher 搭通 Observer 和 Compile 之间的通信桥梁，达到 数据变化 -> 视图更新</div>
 
-##### >> 为什么 Data 是一个函数，且返回一个对象呢？
+##### Vue 的响应式原理中 Object.defineProperty 有什么缺陷？为什么在 Vue3.0 采用了 Proxy，抛弃了 Object.defineProperty？
+<div class="font_min"><span class="key_txt">Vue2</span>：采用 Object.defineProperty()</div>
+
+* <div class="font_min">Object.defineProperty() 只能劫持对象的属性，从而需要对每个对象，每个属性进行遍历，如果属性值是对象，还需要递归深度遍历</div>
+<div class="font_min headers">为什么 Vue 不劫持数组，而是重写数组的方法</div>
+<div class="font_min">一，因为数组的位置不固定，数量多变，正常对象 key 对应的 value 一般不会变，但是如果数组删除了某个元素，比如第一个元素被删除或头部增加一个元素，那么将会导致后面所有的 key 对应的 value 值错位，如果6个元素，就会触发5次 set</div>
+<div class="font_min">二，数组元素可能非常多，对每个元素进行劫持会有一定浪费</div>
+<div class="font_min">三，Vue 将数组的7个变异方法进行重写，也就是改变了 Array 原型上的方法达到数据劫持</div>
+<div class="font_min">例如：</div>
+
+```js
+const arr = [1,2,3,4,5,6]
+
+for(let key in arr) {
+    let value = arr[key]
+    Object.defineProperty(arr, key, {
+        get(){
+            console.log(`get: ${key}`)
+            return value
+        },
+        set(newValue) {
+            console.log(`set: ${key} to ${newValue}`)
+            return value = newValue
+        }
+    })
+}
+
+arr[0] = 99 // set: 0 to 99
+arr[3] //get: 3
+arr.shift() // 会导致5次前移，所以产生5次get和5次set
+```
+
+<div class="font_min"><span class="key_txt">Vue3</span>：采用 Proxy()</div>
+
+* <div class="font_min">Proxy() 可以劫持整个对象，并返回一个新的对象。Proxy 虽然劫持的是整个对象，但也是浅层劫持，属性值是对象时同样也需要深度遍历，不然该属性对象的变化也无法检测到</div>
+<div class="font_min">例如：</div>
+
+```js
+const obj = {
+    count = 5,
+    user: { name: 'JavaScript', age: 18 }
+}
+
+const proxyObj = new Proxy(obj, {
+    get(target, key) {
+        console.log(`get: ${key}`)
+        return target[key]
+    },
+    set(target, key, newValue) {
+        console.log(`set: ${key} to ${newValue}`)
+        return target[key] = newValue
+    }
+})
+
+proxyObj.user.name = 'Proxy' //get: user
+```
+<div class="font_min">深度遍历</div>
+
+```js
+function deepProxy(obj) {
+    return new Proxy(obj, {
+        /* 
+        target: 数据源对象
+        key: 数据源对象的key
+        */
+        get(target, key) {
+            console.log(`get: ${key}`)
+            if(typeof target[key] === 'object' && target[key] !== null) {
+                return deepProxy(target[key])//递归劫持
+            }
+            return target[key]
+        },
+        /*
+        target: 数据源对象
+        key：数据源对象的key
+        newValue：修改的最新值
+        */
+        set(target, key, newValue) {
+            console.log(`set: ${key} to ${newValue}`)
+            return target[key] = newValue
+        }
+    })
+}
+const obj = {
+      count: 5,
+      user: { name: 'JavaScript', age: 22 }
+  } 
+const proxiedObj = deepProxy(obj)
+
+proxiedObj.user.name = 'Golang'
+  /*
+  控制台如下：
+  get：user
+  set：name to Golang
+  */    
+
+/* 修改/访问 原先不存在的属性 */ 
+console.log(proxiedObj.someProp) // get: someProp
+proxiedObj.someProp = 'some value' // set: someProp to some value
+```
+<div class="font_min headers">所以为什么 Proxy 优于 Object.defineProperty()</div>
+<div class="font_min">从例子中看到，Object.defineProperty() 必须预先劫持属性。被劫持的属性才能被监听，所以后添加的属性，需要手动再次劫持</div>
+<div class="font_min">而 Proxy 劫持了整个对象，不需要预先劫持属性，而是在获取/修改的时候，通过 get/set 方法来告诉你 key。所以不管如何增加属性，都可以被捕获到</div>
+
+##### 为什么 Data 是一个函数，且返回一个对象呢？
 <div class="font_min">组件会被多次调用，如果 data 不是一个函数，组件之间的数据会出现数据污染</div>
 
-##### >> 谈谈你对 keep-alive 的了解？
+##### 谈谈你对 keep-alive 的了解？
 <div class="font_min">keep-alive 是 Vue 内置的一个组件，可以使被包含的组件保留状态，避免重新渲染，其有一下特性：</div>
 
 * <div class="font_min">一般结合路由和动态组件一起使用，用于缓存组件</div>
 * <div class="font_min">提供 include 和 exclude 属性，两者都支持字符串或正则表达式，include 表示只有名称匹配的组件会被缓存，exclude 表示任何名称匹配的组件都不会被缓存，其中 exclude 比 include 优先级要高</div>
 * <div class="font_min">对应两个钩子函数 activated 和 deactivated，当组件被激活时，触发钩子函数 activated，当组件被销毁时，触发钩子函数 deactivated</div>
 
-##### >> Vue 的修饰符
+##### Vue 的修饰符
 <image src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5a1c911988f74cea91da79af3c6049c2~tplv-k3u1fbpfcp-watermark.awebp" />
 
-##### >> Vue 的内部指令
+##### Vue 的内部指令
 <image src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d39d348e686b449e8931f5a85802e3c6~tplv-k3u1fbpfcp-watermark.awebp" />
 
-##### >> v-if 和 v-show 有何区别？
+##### v-if 和 v-show 有何区别？
 * <div class="font_min">1. v-if 是通过控制 DOM 元素的删除和生成来实现删除和生成，类似 display: none</div>
 * <div class="font_min">2. v-show 是通过控制 DOM 元素的 css 样式来实现隐藏和显示，不会销毁，类似 visibility: hidden</div>
 * <div class="font_min">3. 频繁或者大数量显隐使用 v-show，否则使用 v-if</div>
 
-##### >> Class 与 Style 如何动态绑定？
+##### Class 与 Style 如何动态绑定？
 <div class="font_min">Class 可以通过对象语法和数组语法进行绑定</div>
 
 * <div class="font_min">对象语法：</div>
@@ -136,11 +240,11 @@ data: {
 
 <div class="font_min">Style 也可以通过对象语法和数组语法进行动态绑定</div>
 
-##### >> 为什么 v-if 和 v-for 不建议用在同一标签？
+##### 为什么 v-if 和 v-for 不建议用在同一标签？
 <div class="font_min">1. v-for 的优先级大于 v-if，如果要遍历的数组很大，但展示的数据很少，会造成性能浪费。</div>
 <div class="font_min">2. 建议使用 computed 过滤数据先</div>
 
-##### >> Vuex 的理解
+##### Vuex 的理解
 <div class="font_min">Vuex 是一个专门为 Vue 应用程序开发的状态管理工具，每一个 Vuex 应用的核心就是 store（仓库）</div>
 <div class="markdown-body">
 <div class="font_min">1. Vuex 的状态是响应式的，当 Vue 组件从 store 中读取状态的时候，若 store 的状态发生变化，那么相应的组件也会得到更新响应</div>
@@ -207,11 +311,11 @@ methods: {
 }
 ```
 
-##### >> Vuex 页面刷新数据丢失如何解决
+##### Vuex 页面刷新数据丢失如何解决
 <div class="font_min">需要做 vuex 数据持久化，一般使用本地存储的方案来保存数据，也可以使用第三方插件</div>
 <div class="font_min">推荐使用 <span class="key_txt">vuex-persist</span> 插件，它就是为 vuex 持久化存储而生的一个插件，不需要你手动存取 store，而是直接将状态保存到 cookie 或者 localStorage 中</div>
 
-##### >> 不需要响应式的数据应该如何处理
+##### 不需要响应式的数据应该如何处理
 <div class="font_min">在开发中，会有一些数据，从始至终都未曾变过，这种死数据，既然不会改变，那也就不需要对它做响应式处理，不然只会消耗性能。</div>
 
 ```bash
@@ -229,7 +333,7 @@ data() {
 }
 ```
 
-##### >>watch 有哪些属性，分别的作用
+#####watch 有哪些属性，分别的作用
 <div class="font_min">当我们监听一个基本数据类型的时候</div>
 
 ```bash
@@ -254,7 +358,7 @@ watch: {
 }
 ```
 
-##### >>vue 的 hook 使用
+#####vue 的 hook 使用
 <div class="font_min headers">同一组件使用</div>
 <div class="markdown-body">这是我们常用的定时器方式</div>
 
@@ -329,7 +433,7 @@ methods: {
 //子组件什么也不需要操作
 ```
 
-##### >>Vue 自定义指令
+#####Vue 自定义指令
 <div class="font_min">在 Vue，除了核心功能默认设置的内置指令（v-module, v-show, v-if, v-for 等）,Vue 也允许注册自定义指令。它的作用价值在于当开发人员在某些场景下需要对普通 DOM 元素进行操作</div>
 <div class="font_min">Vue 自定义指令有全局注册和局部注册两种方式。通过 <span class="key_txt">Vue.directive(id, [definition])</span> 方法注册全局指令，然后在入口文件中进行 Vue.use() 调用</div>
 <div class="font_min">局部注册在需要使用的页面 import 引入，使用 <span class="key_txt">directive: {name}</span> </div>

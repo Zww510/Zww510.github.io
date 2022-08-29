@@ -180,6 +180,7 @@ let jsonText = JSON.stringify(book, ['title', 'edition'])
 
 * <div class="font_min">如果第二个参数是函数，则行为又有不同。提供的函数接受两个参数：属性名（key）和属性值（value）</div>
 <div class="font_min">注意：<span class="key_txt">返回 undefined 会导致属性会被忽略。如下例子：</span></div>
+
 ```js
 let book = {
             title: "Professional JavaScript",
@@ -203,4 +204,17 @@ let book = {
             }
         })
 //最终的到的 JSON 字符串是这样的： {"title":"Professional JavaScript","authors":"Nicholas C. Zakas,Matt Frisbie","year":5000}
+```
+
+```js
+//instanceof 用于检测某个构造函数的原型对象在不在某个对象的原型链上
+function myInstanceof(left, right) {
+    let prototype = right.prototype
+    left = left.__proto__
+    while(true) {
+        if(left === undefined || left === null) return false
+        if(left === prototype) return true
+        left = left.__proto__
+    }
+}
 ```

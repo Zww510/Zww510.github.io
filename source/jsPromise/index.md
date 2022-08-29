@@ -20,7 +20,7 @@ promise.then(value => {
 //输出 resolve success
 ```
 
-<div class="font_min">我们来分析一下基本原理</div>
+<div class="font_min">我们来分析一下基本的原理~~~~~~~~~~~~~~~~~~~~</div>
 <div class="markdown-body">
 <div class="font_min">1. Promise 是一个类，在执行这个类的时候会传入一个执行器，这个执行器会立即执行</div>
 <div class="font_min">2. Promise 会有三种状态</div>
