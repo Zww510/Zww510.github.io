@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zww510.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="关于 JavaScriptjavascript 是一门单线程语言，在最新的 HTML5 中提出了 web-worker，但 javascript 是单线程这一核心从未改变。所以一切 javascript 版的&quot;多线程&quot;都是用单线程模拟出来的。  JavaScript 事件循环既然 JS 是个单线程，那就像只有一个窗口的银行，客户需要排队一个一个办理业务，同理 js 任务也要一个一个顺序执行。如果一">
+<meta property="og:type" content="website">
+<meta property="og:title" content="JavaScript 执行机制">
+<meta property="og:url" content="https://zww510.github.io/jsExecute/index.html">
+<meta property="og:site_name" content="Zzz">
+<meta property="og:description" content="关于 JavaScriptjavascript 是一门单线程语言，在最新的 HTML5 中提出了 web-worker，但 javascript 是单线程这一核心从未改变。所以一切 javascript 版的&quot;多线程&quot;都是用单线程模拟出来的。  JavaScript 事件循环既然 JS 是个单线程，那就像只有一个窗口的银行，客户需要排队一个一个办理业务，同理 js 任务也要一个一个顺序执行。如果一">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-15T07:01:17.299Z">
+<meta property="article:modified_time" content="2023-08-15T07:01:17.299Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://zww510.github.io/jsExecute/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : false,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>JavaScript 执行机制 | Zzz
+</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zzz</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录生活中的点点滴滴</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>八股文</a>
+
+  </li>
+        <li class="menu-item menu-item-jsbasicsinherit">
+
+    <a href="/jsBasicsInherit/" rel="section"><i class="fa fa-th fa-fw"></i>JS继承</a>
+
+  </li>
+        <li class="menu-item menu-item-jsbasicsproto">
+
+    <a href="/jsBasicsProto/" rel="section"><i class="fa fa-th fa-fw"></i>JS原型链</a>
+
+  </li>
+        <li class="menu-item menu-item-jsexecute">
+
+    <a href="/jsExecute/" rel="section"><i class="fa fa-th fa-fw"></i>JS执行机制</a>
+
+  </li>
+        <li class="menu-item menu-item-jspromise">
+
+    <a href="/jsPromise/" rel="section"><i class="fa fa-th fa-fw"></i>Promise</a>
+
+  </li>
+        <li class="menu-item menu-item-jsscopechain">
+
+    <a href="/jsScopeChain/" rel="section"><i class="fa fa-th fa-fw"></i>作用域</a>
+
+  </li>
+        <li class="menu-item menu-item-jsutils">
+
+    <a href="/jsUtils/" rel="section"><i class="fa fa-th fa-fw"></i>工具函数</a>
+
+  </li>
+        <li class="menu-item menu-item-jswrite">
+
+    <a href="/jsWrite/" rel="section"><i class="fa fa-th fa-fw"></i>手写题</a>
+
+  </li>
+        <li class="menu-item menu-item-softwaretest">
+
+    <a href="/softwareTest/" rel="section"><i class="fa fa-th fa-fw"></i>系统集成项目管理师</a>
+
+  </li>
+        <li class="menu-item menu-item-tcp-dep">
+
+    <a href="/Tcp-Dep/" rel="section"><i class="fa fa-th fa-fw"></i>Tcp-Dep</a>
+
+  </li>
+        <li class="menu-item menu-item-vuelesson">
+
+    <a href="/vuelesson/" rel="section"><i class="fa fa-th fa-fw"></i>Vue</a>
+
+  </li>
+        <li class="menu-item menu-item-vuemodel">
+
+    <a href="/vueModel/" rel="section"><i class="fa fa-th fa-fw"></i>Vue双向绑定</a>
+
+  </li>
+        <li class="menu-item menu-item-vuesvg">
+
+    <a href="/vueSvg/" rel="section"><i class="fa fa-th fa-fw"></i>VueSvg</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+  
+  
+
+          <div class="content page posts-expand">
+            
+
+    
+    
+    
+    <div class="post-block" lang="zh-CN">
+      <header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">JavaScript 执行机制
+</h1>
+
+<div class="post-meta">
+  
+
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <h5 id="关于-JavaScript"><a href="#关于-JavaScript" class="headerlink" title="关于 JavaScript"></a>关于 JavaScript</h5><div class="font_min">javascript 是一门单线程语言，在最新的 HTML5 中提出了 web-worker，但 javascript 是单线程这一核心从未改变。所以一切 javascript 版的"多线程"都是用单线程模拟出来的。</div>
+
+<h5 id="JavaScript-事件循环"><a href="#JavaScript-事件循环" class="headerlink" title="JavaScript 事件循环"></a>JavaScript 事件循环</h5><div class="font_min">既然 JS 是个单线程，那就像只有一个窗口的银行，客户需要排队一个一个办理业务，同理 js 任务也要一个一个顺序执行。如果一个任务耗时过长，那么后一个任务也必须等着。那么问题来了，如我们想浏览新闻，但是新闻包含的超清图片加载很慢，难道我们的网页要一直卡着知道图片完全显示出来？因此聪明的程序员将任务分为两类：</div>
+
+<ul>
+<li><div class="font_min key_txt">同步任务</div></li>
+<li><div class="font_min key_txt">异步任务</div></li>
+</ul>
+<div class="font_min">当我们打开网站时，网页的渲染过程就是一大堆同步任务，也如页面骨架和页面元素的渲染。而像加载图片音乐之类的占用资源大耗时久的任务，就是异步任务。</div>
+<image style="transform: scale(0.8);" src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2017/11/21/15fdd88994142347~tplv-t2oaga2asx-watermark.awebp" />
+
+<div class="font_min">导图要表达的内容用文字来表述的话：</div>
+
+<ul>
+<li><div class="font_min">同步和异步分别进入不同的执行"场所"，同步进入主线程，异步进入 Event Table 并注册函数。</div></li>
+<li><div class="font_min">当指定的事情完成时，Event Table（事件表） 会将这个函数移入 Event Queue（事件队列）。</div></li>
+<li><div class="font_min">主线程内的任务执行完毕为空，会去 Event Queue 中读取对应的函数，并进入主线程执行。</div></li>
+<li><div class="font_min">上述过程会不断重复，也就是常说的 Event Loop（事件循环）。</div></li>
+</ul>
+<div class="font_min">我们不经要问了，那如何知道主线程执行栈为空？ js 引擎存在 monitoring process 进程（监视进程），会持续不断的检查主线程执行栈是否为空，一旦为空，就会去 Event Queue 那里检查是否有等待被调用的函数。</div>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> data = [];</span><br><span class="line">$.ajax(&#123;</span><br><span class="line">    <span class="attr">url</span>:www.javascript.com,</span><br><span class="line">    <span class="attr">data</span>:data,</span><br><span class="line">    <span class="attr">success</span>:<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;发送成功!&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;代码执行结束&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><div class="font_min">ajax 进入到 Event Table，注册回调函数 <span class="key_txt">success</span>。</div></li>
+<li><div class="font_min">执行 <span class="key_txt">console.log('代码执行结束')</span>。</div></li>
+<li><div class="font_min">ajax 事件完成后，回调函数 <span class="key_txt">success</span> 进入 Event Queue。</div></li>
+<li><div class="font_min">主线程从 <span class="key_txt">Event Queue</span> 读取回调函数 success 并执行。</div></li>
+</ul>
+<h5 id="又爱有恨的-setTimeout"><a href="#又爱有恨的-setTimeout" class="headerlink" title="又爱有恨的 setTimeout"></a>又爱有恨的 setTimeout</h5><div class="font_min">大名鼎鼎的 setTimeout 无需多言，大家对他的第一印象就是异步可以延时执行，我们经常实现3秒执行：</div>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;延时3秒&#x27;</span>)</span><br><span class="line">&#125;,<span class="number">3000</span>)</span><br></pre></td></tr></table></figure>
+<div class="font_min">渐渐的 setTimeout 用的地方多了，问题也出现了，有时明明写的是延时3秒，实际确5，6秒才执行函数，这又是咋回事？</div>
+<div class="font_min">先看个例子？</div>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    task()</span><br><span class="line">&#125;, <span class="number">3000</span>)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;执行console&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<div class="font_min"><span class="key_txt">setTimeout</span> 是异步的，应该会先执行 <span class="key_txt">console.log</span> 这个同步任务，所以结论是：</div>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//执行console</span></span><br><span class="line"><span class="comment">//task()</span></span><br></pre></td></tr></table></figure>
+<div class="font_min">然后我们修改一下前面的代码</div>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    task()</span><br><span class="line">&#125;, <span class="number">3000</span>)</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sleep</span> (<span class="params">time</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> <span class="built_in">setTimeout</span>(resolve, time));</span><br><span class="line">&#125;</span><br><span class="line">sleep(<span class="number">10000000</span>).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;我是sleep方法&#x27;</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<div class="font_min">这段代码在 chrome 执行一下，却发现控制台执行 <span class="key_txt">task()</span> 需要的时间远远超过3秒，说好的延迟3秒，为啥现在需要这么长时间？</div>
+<div class="font_min">这时候我们需要重新理解 <span class="key_txt">setTimeout</span> 的定义，我们先说上述代码是如何执行的：</div>
+
+<ul>
+<li><div class="font_min"><span class="key_txt">task()</span> 进入 Event Table 并注册，计时开始。</div></li>
+<li><div class="font_min">执行 <span class="key_txt">sleep</span> 函数，很慢，非常慢，计时仍在继续。</div></li>
+<li><div class="font_min">3秒到了，计时器 <span class="key_txt">timeout</span> 完成，<span class="key_txt">task()</span> 进入 Event Queue，但 <span class="key_txt"></span>sleep 也太慢了，还没执行完，只好等待。</div></li>
+<li><div class="font_min"><span class="key_txt">sleep</span> 终于执行完了，<span class="key_txt">task()</span> 终于从 Event Queue 进入主线程执行。</div></li>
+</ul>
+<div class="font_min">上述流程走完，我们知道 setTimeout 这个函数，是经过指定时间后，把要执行的任务（本例的 task()）加入到 Event Queue 中，又因为是单线程任务要一个一个执行，如果前面的任务需要的时间太久，那么只能等着，导致真正延迟时间远远大于3秒。</div>
+<div class="font_min">经常遇到 <span class="key_txt">setTimeout(fn, 0)</span>这样的代码，0秒后执行又是什么意思呢？是不是可以立即执行？</div>
+<div class="font_min"><span class="key_txt">不会立即执行</span>，setTimeout(fn, 0) 的含义是，指定某个任务在主线程最早可得的空闲时间执行，意思就是说不用在等多少秒了，只要主线程执行栈内的同步任务全部执行完毕，栈为空就会马上执行。举例说明：</div>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//代码1</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;先执行这里&#x27;</span>);</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;执行啦&#x27;</span>)</span><br><span class="line">&#125;,<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//代码2</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;先执行这里&#x27;</span>);</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;执行啦&#x27;</span>)</span><br><span class="line">&#125;,<span class="number">3000</span>);  </span><br><span class="line"></span><br><span class="line"><span class="comment">//代码1的输出结果是：</span></span><br><span class="line"><span class="comment">//先执行这里</span></span><br><span class="line"><span class="comment">//执行啦</span></span><br><span class="line"></span><br><span class="line">代码<span class="number">2</span>的输出结果是：</span><br><span class="line"><span class="comment">//先执行这里</span></span><br><span class="line"><span class="comment">// ... 3s later</span></span><br><span class="line"><span class="comment">// 执行啦</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="又爱有恨的-setInterval"><a href="#又爱有恨的-setInterval" class="headerlink" title="又爱有恨的 setInterval"></a>又爱有恨的 setInterval</h5><div class="font_min">他和 setTimeout 差不多，只不过 <span class="key_txt">setInterval</span> 是循环的执行。对于执行顺序来说，<span class="key_txt">setInterval</span> 会每隔指定的时间将注册的函数放置入 <span class="key_txt">Event Queue</span>，如果前面的任务耗时太久，那么同样需要等待。</div>
+
+<h5 id="Promise-与-process-nextTick-callback"><a href="#Promise-与-process-nextTick-callback" class="headerlink" title="Promise 与 process.nextTick(callback)"></a>Promise 与 process.nextTick(callback)</h5><div class="font_min"><span class="key_txt">Promise</span>的定义不在叙述，可以学习阮一峰老师的 <a class="headers" target="_blank" rel="noopener" href="https://es6.ruanyifeng.com/#docs/promise">Promise</a></div>
+<div class="font_min">除了广义的同步任何和异步任务，我们对任务有更精细的定义：</div>
+
+<ul>
+<li><div class="font_min"><span class="key_txt">宏任务（macro-task）</span>：包括整体代码 script, setTimeout, setInterval</div></li>
+<li><div class="font_min"><span class="key_txt">微任务（micro-task）</span>：Promise, async/await</div></li>
+</ul>
+<div class="font_min">不同类型的任务会进入对应的 Event Queue，比如 <span class="key_txt">setTimeout</span> 和 <span class="key_txt">setInterval</span> 会进入到相同的 Event Queue。</div>
+<div class="font_min">事件循环的顺序，决定 js 代码的执行顺序。进入整体代码（<span class="key_txt">宏任务</span>）后，开始第一次循环。接着执行所有的微任务。然后再次从宏任务开始，找到其中一个任务队列执行完毕，再执行所有的微任务。</div>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;setTimeout&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;promise&#x27;</span>)</span><br><span class="line">&#125;).then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;then&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;console&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><div class="font_min">这段代码作为宏任务，进入主线程。</div></li>
+<li><div class="font_min">先遇到 setTimeout，那么将其回调函数注册分发到宏任务 Event Queue。</div></li>
+<li><div class="font_min">接下来遇到 <span class="key_txt">Promise</span> ，<span class="key_txt">new Promise</span> 立即执行，<span class="key_txt">then</span> 函数分发到微任务 Event Queue。</div></li>
+<li><div class="font_min">遇到 <span class="key_txt">console.log()</span> 立即执行。</div></li>
+<li><div class="font_min">整体代码 script 作为第一个宏任务执行结束，看看有哪些微任务？我们发现 <span class="key_txt">then</span> 在微任务 Event Queue 里面，执行。</div></li>
+<li><div class="font_min">第一轮事件循环结束，开始第二轮循环，当然要从宏任务 Event Queue 开始。我们发现了宏任务 Event Queue 中 <span class="key_txt">setTimeout</span> 对应的回调函数，立即执行。</div></li>
+<li><div class="font_min">所有代码执行完毕。</div></li>
+</ul>
+<div class="font_min">事件循环，宏任务，微任务关系图如下：</div>
+<image style="transform: scale(0.8);" src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2017/11/21/15fdcea13361a1ec~tplv-t2oaga2asx-watermark.awebp" />
+<script type="text&#x2F;javascript" src="https://unpkg.com/kity@2.0.4/dist/kity.min.js"></script><script type="text&#x2F;javascript" src="https://unpkg.com/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text&#x2F;javascript" src="https://unpkg.com/hexo-simple-mindmap@0.8.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text&#x2F;css" href="https://unpkg.com/hexo-simple-mindmap@0.8.0/dist/mindmap.min.css">
+      </div>
+      
+      
+      
+    </div>
+    
+
+    
+    
+    
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E-JavaScript"><span class="nav-number">1.</span> <span class="nav-text">关于 JavaScript</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#JavaScript-%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="nav-number">2.</span> <span class="nav-text">JavaScript 事件循环</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%88%E7%88%B1%E6%9C%89%E6%81%A8%E7%9A%84-setTimeout"><span class="nav-number">3.</span> <span class="nav-text">又爱有恨的 setTimeout</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%88%E7%88%B1%E6%9C%89%E6%81%A8%E7%9A%84-setInterval"><span class="nav-number">4.</span> <span class="nav-text">又爱有恨的 setInterval</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Promise-%E4%B8%8E-process-nextTick-callback"><span class="nav-number">5.</span> <span class="nav-text">Promise 与 process.nextTick(callback)</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
